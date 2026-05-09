@@ -15,6 +15,7 @@ const ScreenPlane = () => {
         useTexture(publicPath("images/image1.webp")),
         useTexture(publicPath("images/image2.webp")),
         useTexture(publicPath("images/image3.webp")),
+        useTexture(publicPath("images/image4.webp")),
     ];
     const displacement = useTexture(publicPath("images/displacement1.webp"));
 
@@ -95,11 +96,43 @@ const ScreenPlane = () => {
         updateAspect(currentIndex.current);
     };
 
+    // -----------------------------
+    // below are for mobile touch
+    const touchStartPos = useRef(0);
+
+    const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+        touchStartPos.current = e.clientY;
+    };
+
+    const handlePointerUp = (e: ThreeEvent<PointerEvent>) => {
+        if (inProgress.current) return;
+
+        const touchEndPos = e.clientY;
+        const distance = touchStartPos.current - touchEndPos;
+
+        if (Math.abs(distance) > 10) {
+            // stop touch event until progress is 1.0
+            inProgress.current = true;
+            progress.current = 0;
+
+            prevIndex.current = currentIndex.current;
+            if (distance > 0) {
+                currentIndex.current = (currentIndex.current + 1) % textures.length;
+            } else {
+                currentIndex.current = (currentIndex.current + textures.length - 1) % textures.length;
+            }
+
+            updateAspect(currentIndex.current);
+        }
+    };
+
     return (
         <Plane 
             ref={meshRef} 
             args={[viewport.width, viewport.height]} 
             onWheel={handleWheel}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
         >
             <shaderMaterial args={[shader]} />
         </Plane>
