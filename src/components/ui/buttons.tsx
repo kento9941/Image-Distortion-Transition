@@ -10,6 +10,7 @@ const Buttons = ({ effect, setEffect }: ButtonsProps) => {
         <div className="flex flex-row gap-5 text-[1rem] md:text-[1.5rem] md:gap-10">
             <Button num={0} effect={effect} setEffect={setEffect} />
             <Button num={1} effect={effect} setEffect={setEffect} />
+            <Button num={2} effect={effect} setEffect={setEffect} />
         </div>
     )
 };

@@ -6,7 +6,7 @@ uniform vec2 u_uvScale;
 varying vec2 v_uv;
 
 // constants
-const float PI = 3.1415;
+const float PI = 3.1415926535;
 const float angle1 = - PI * 0.25;
 const float angle2 = PI * 0.75;
 

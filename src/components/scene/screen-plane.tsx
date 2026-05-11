@@ -6,6 +6,7 @@ import { useRef, useEffect, useMemo } from "react";
 import vertex from "../../shaders/vertex-shader.glsl";
 import fragment1 from "../../shaders/fragment-shader1.glsl";
 import fragment2 from "../../shaders/fragment-shader2.glsl";
+import fragment3 from "../../shaders/fragment-shader3.glsl";
 import { publicPath } from "../../utils/public-path";
 
 interface Props {
@@ -22,10 +23,8 @@ const ScreenPlane = ({ effect }: Props) => {
         useTexture(publicPath("images/image3.webp")),
         useTexture(publicPath("images/image4.webp")),
     ];
-
     const displacement = useTexture(publicPath("images/displacement1.webp"));
-
-    const fragments = [fragment1, fragment2];
+    const fragments = [fragment1, fragment2, fragment3];
 
     const prevIndex = useRef(0);
     const currentIndex = useRef(0);
@@ -46,6 +45,7 @@ const ScreenPlane = ({ effect }: Props) => {
         }
     }, []);
 
+    // -----------------------------
     // update aspect ratio for each image
     const updateAspect = (index: number) => {
         const image = images[index].image;
@@ -62,6 +62,7 @@ const ScreenPlane = ({ effect }: Props) => {
         updateAspect(currentIndex.current);
     }, [viewport]);
 
+    // -----------------------------
     // toggle fragment shaders
     useEffect(() => {
         if (meshRef.current) {
@@ -84,6 +85,7 @@ const ScreenPlane = ({ effect }: Props) => {
             let eased = progress.current;
             if (effect === 0) eased = easeOutExpo(progress.current);
             else if (effect === 1) eased = easeInOutCubic(progress.current);
+            else if (effect === 2) eased = easeInOutCubic(progress.current);
 
             shader.uniforms.u_progress.value = eased;
         };
